@@ -14,26 +14,22 @@ function Index() {
           integrity="sha384-HGfztofotfshcF7+8n44JQL2oJmowVChPTg48S+jvZoztPfvwD79OC/LTtG6dMp+"
           crossorigin="anonymous"
         ></script>
-        <script src="https://unpkg.com/@tailwindcss/browser@4.0.9/dist/index.global.js"></script>
       </head>
       <body hx-boost>
-        <form hx-post="/books" hx-target="#books">
-          <input hidden={true} value="somevalue" name="something" />
-          <button
-            className="p-1 rounded-md shadow-md border-gray-400 border-1"
-            type="submit"
-          >
-            Get Books
-          </button>
+        <form hx-post="/books" hx-target="#books" hx-swap="beforeend">
+          <input name="book" />
+          <button type="submit">Add Book</button>
         </form>
-        <div id="books"></div>
+        <ul id="books">
+          <li>Harry Potter</li>
+        </ul>
       </body>
     </html>
   );
 }
 
-function Books() {
-  return <p>All Books</p>;
+function Books({ book }: { book: string }) {
+  return <li>{book}</li>;
 }
 
 app.get("/", (c: Context) => {
@@ -42,8 +38,12 @@ app.get("/", (c: Context) => {
 
 app.post("/books", async (c: Context) => {
   const formData = await c.req.formData();
-  console.log(formData.get("something"));
-  return c.html(<Books />);
+  const book = formData.get("book") as string;
+  if (book) {
+    return c.html(<Books book={book} />);
+  } else {
+    return new Response("Invalid book", { status: 400 });
+  }
 });
 
 Deno.serve(app.fetch);

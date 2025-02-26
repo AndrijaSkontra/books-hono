@@ -1,3 +1,1 @@
-```
-deno task start
-```
+deploy: ` deployctl deploy --entrypoint main.tsx`
