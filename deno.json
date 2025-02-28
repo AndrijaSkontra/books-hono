@@ -3,7 +3,7 @@
     "hono": "jsr:@hono/hono@^4.7.2"
   },
   "tasks": {
-    "start": "deno run --allow-net --watch-hmr main.tsx"
+    "start": "deno run --allow-net --allow-read --watch-hmr main.ts"
   },
   "compilerOptions": {
     "jsx": "precompile",
